@@ -4,10 +4,23 @@ object SemanticVersion {
 
   def parser(versionString: String): SemanticVersion = {
     val params = versionString.split("\\.", 3)
-    SemanticVersion(
-      major = params(0).toInt,
-      minor = params(1).toInt,
-      patch = params(2).toInt
-    )
+    params match {
+      case Array(major) => SemanticVersion(
+          major = major.toInt,
+          minor = 0,
+          patch = 0,
+        )
+      case Array(major, minor) => SemanticVersion(
+        major = major.toInt,
+        minor = minor.toInt,
+        patch = 0
+      )
+      case Array(major, minor, patch) => SemanticVersion(
+        major = major.toInt,
+        minor = minor.toInt,
+        patch = patch.toInt
+      )
+      case _ => throw new IllegalArgumentException(versionString)
+    }
   }
 }
